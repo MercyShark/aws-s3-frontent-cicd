@@ -19,7 +19,7 @@ jobs:
 
       - name: installing dependency
         run: npm ci
-        
+
       - name: building 
         run: npm run build
       
@@ -33,7 +33,26 @@ jobs:
           name: build_files
           path: |
             dist
-      
+
+        
+  deploying:
+    environment: production
+    runs-on: ubuntu-latest
+    steps:
+      - name: download the artifact
+        uses: actions/download-artifact@v4
+        with: 
+          name: build_files
+          path: ./dist
+
+      - name: show contents
+        run : ls -R ./dist
+
+      - name: ls
+        run : ls 
+
+
+
 
 
 
