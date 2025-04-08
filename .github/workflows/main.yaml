@@ -39,6 +39,10 @@ jobs:
     needs: building
     environment: production
     runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
+      AWS_SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
     steps:
       - name: download the artifact
         uses: actions/download-artifact@v4
@@ -46,11 +50,16 @@ jobs:
           name: build_files
           path: ./dist
 
-      - name: show contents
-        run : ls -R ./dist
 
-      - name: ls
-        run : ls 
+      - name: AWS Login
+        run : | 
+          aws configure set aws_access_key_id $AWS_ACCESS_KEY
+          aws configure set aws_secret_access_key $AWS_SECRET_KEY
+          aws configure set region $AWS_REGION
+    
+      - name: upload the artifact to s3 
+        run:  aws s3 sync ./dist s3://${{ vars.AWS_BUCKET_NAME }}/ --recursive
+
 
 
 
