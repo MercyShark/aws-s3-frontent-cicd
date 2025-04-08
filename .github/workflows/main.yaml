@@ -36,6 +36,7 @@ jobs:
 
         
   deploying:
+    needs: building
     environment: production
     runs-on: ubuntu-latest
     steps:
