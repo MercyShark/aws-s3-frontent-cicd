@@ -1,0 +1,37 @@
+name: Building and deploying 
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+
+jobs:
+  building:
+    runs-on:  ubuntu-latest
+    
+    steps:
+      - name: Checkout score repository
+        uses: actions/checkout@v3
+
+      - name: building 
+        run: npm run build
+      
+        env: 
+          VITE_PASSWORD: ${{ secrets.admin }}
+
+      
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
+        with: 
+          name: build_files
+          path: |
+            dist
+      
+
+
+
+      
+
